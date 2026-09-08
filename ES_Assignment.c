@@ -15,14 +15,11 @@
 #define SUBJECTS 5
 #define NAME_LENGTH 50
 
+
 /* ================================================================
    STORAGE CLASS - extern
    ================================================================ */
 
-/*
- * This variable is declared using extern.
- * The actual definition is provided below.
- */
 extern int totalStudents;
 
 
@@ -51,15 +48,8 @@ typedef struct
 
 Student students[MAX_STUDENTS];
 
-/*
- * Definition of the extern variable.
- */
 int totalStudents = 0;
 
-
-/*
- * const variable demonstrates constant data.
- */
 const int PASS_MARK = 40;
 
 
@@ -68,25 +58,15 @@ const int PASS_MARK = 40;
    ================================================================ */
 
 void displayTitle(void);
-
 void addStudent(void);
-
 void displayStudent(Student *student);
-
 void displayAllStudents(void);
-
 void calculateResult(Student *student);
-
 char calculateGrade(float average);
-
 void searchStudent(void);
-
 void displayStatistics(void);
-
 void initializeStudents(void);
-
 int findStudentByRoll(int rollNumber);
-
 void clearInputBuffer(void);
 
 
@@ -98,16 +78,8 @@ int main(void)
 {
     int choice;
 
-    /*
-     * Initialize student records.
-     */
     initializeStudents();
 
-    /*
-     * do-while loop
-     *
-     * The menu will execute at least once.
-     */
     do
     {
         displayTitle();
@@ -122,9 +94,6 @@ int main(void)
         printf("\nEnter your choice: ");
         scanf("%d", &choice);
 
-        /*
-         * switch-case demonstrates menu selection.
-         */
         switch(choice)
         {
             case 1:
@@ -178,11 +147,6 @@ void displayTitle(void)
 
 void initializeStudents(void)
 {
-    /*
-     * for loop
-     *
-     * Initialize all student records.
-     */
     for(int i = 0; i < MAX_STUDENTS; i++)
     {
         students[i].rollNumber = 0;
@@ -215,9 +179,6 @@ void addStudent(void)
         return;
     }
 
-    /*
-     * Pointer points to the next available student record.
-     */
     student = &students[totalStudents];
 
     printf("\n---------------- ADD STUDENT ----------------\n");
@@ -225,9 +186,6 @@ void addStudent(void)
     printf("Enter Roll Number: ");
     scanf("%d", &student->rollNumber);
 
-    /*
-     * Check whether roll number already exists.
-     */
     if(findStudentByRoll(student->rollNumber) != -1)
     {
         printf("\nError: Roll number already exists!\n");
@@ -239,18 +197,8 @@ void addStudent(void)
     printf("Enter Student Name: ");
     fgets(student->name, NAME_LENGTH, stdin);
 
-    /*
-     * Remove newline character from string.
-     */
     student->name[strcspn(student->name, "\n")] = '\0';
 
-
-    /*
-     * Array of subject names.
-     *
-     * This demonstrates a 2-dimensional character array
-     * and strings.
-     */
     const char subjectNames[SUBJECTS][30] =
     {
         "Embedded Systems",
@@ -260,10 +208,6 @@ void addStudent(void)
         "Programming in C"
     };
 
-
-    /*
-     * for loop used to enter marks.
-     */
     for(int i = 0; i < SUBJECTS; i++)
     {
         do
@@ -273,9 +217,6 @@ void addStudent(void)
 
             scanf("%d", &student->marks[i]);
 
-            /*
-             * Decision making.
-             */
             if(student->marks[i] < 0 ||
                student->marks[i] > 100)
             {
@@ -287,18 +228,9 @@ void addStudent(void)
               student->marks[i] > 100);
     }
 
-
-    /*
-     * Calculate total, average, grade and result.
-     */
     calculateResult(student);
 
-
-    /*
-     * Increase number of students.
-     */
     totalStudents++;
-
 
     printf("\nStudent added successfully!\n");
 
@@ -313,52 +245,22 @@ void addStudent(void)
 
 void calculateResult(Student *student)
 {
-    /*
-     * static variable demonstrates the static storage class.
-     *
-     * This variable retains its value between function calls.
-     */
     static int calculationCount = 0;
 
     student->total = 0;
 
-    /*
-     * Calculate total using array.
-     */
     for(int i = 0; i < SUBJECTS; i++)
     {
         student->total += student->marks[i];
     }
 
-
-    /*
-     * Typecasting:
-     *
-     * student->total is an integer.
-     * SUBJECTS is an integer.
-     *
-     * Explicit conversion to float prevents integer
-     * division.
-     */
     student->average =
         (float)student->total / (float)SUBJECTS;
 
-
-    /*
-     * Calculate grade.
-     */
     student->grade = calculateGrade(student->average);
 
-
-    /*
-     * Initially assume student has passed.
-     */
     student->result = 1;
 
-
-    /*
-     * A student must obtain PASS_MARK in every subject.
-     */
     for(int i = 0; i < SUBJECTS; i++)
     {
         if(student->marks[i] < PASS_MARK)
@@ -368,13 +270,7 @@ void calculateResult(Student *student)
         }
     }
 
-
     calculationCount++;
-
-    /*
-     * calculationCount is intentionally not printed.
-     * Its purpose is to demonstrate static storage.
-     */
 }
 
 
@@ -384,10 +280,6 @@ void calculateResult(Student *student)
 
 char calculateGrade(float average)
 {
-    /*
-     * Decision-making statements.
-     */
-
     if(average >= 90)
     {
         return 'A';
@@ -430,27 +322,20 @@ void displayStudent(Student *student)
         "Programming in C"
     };
 
-
     printf("\n");
     printf("-----------------------------------------------\n");
 
     printf("Roll Number : %d\n", student->rollNumber);
-
     printf("Name        : %s\n", student->name);
 
     printf("-----------------------------------------------\n");
 
-
-    /*
-     * Display marks using for loop.
-     */
     for(int i = 0; i < SUBJECTS; i++)
     {
         printf("%-22s : %d\n",
                subjectNames[i],
                student->marks[i]);
     }
-
 
     printf("-----------------------------------------------\n");
 
@@ -464,10 +349,6 @@ void displayStudent(Student *student)
     printf("Grade       : %c\n",
            student->grade);
 
-
-    /*
-     * Decision making.
-     */
     if(student->result == 1)
     {
         printf("Result      : PASS\n");
@@ -493,13 +374,8 @@ void displayAllStudents(void)
         return;
     }
 
-
     printf("\n================ ALL STUDENTS ================\n");
 
-
-    /*
-     * Loop through student array.
-     */
     for(int i = 0; i < totalStudents; i++)
     {
         displayStudent(&students[i]);
@@ -516,23 +392,16 @@ void searchStudent(void)
     int rollNumber;
     int index;
 
-
     if(totalStudents == 0)
     {
         printf("\nNo student records available.\n");
         return;
     }
 
-
     printf("\nEnter Roll Number to search: ");
     scanf("%d", &rollNumber);
 
-
-    /*
-     * Function returns array index.
-     */
     index = findStudentByRoll(rollNumber);
-
 
     if(index != -1)
     {
@@ -553,9 +422,6 @@ void searchStudent(void)
 
 int findStudentByRoll(int rollNumber)
 {
-    /*
-     * for loop for searching.
-     */
     for(int i = 0; i < totalStudents; i++)
     {
         if(students[i].rollNumber == rollNumber)
@@ -564,9 +430,6 @@ int findStudentByRoll(int rollNumber)
         }
     }
 
-    /*
-     * -1 means not found.
-     */
     return -1;
 }
 
@@ -577,8 +440,8 @@ int findStudentByRoll(int rollNumber)
 
 void displayStatistics(void)
 {
-    int highest = -1;
-    int lowest = 101;
+    float highest = -1.0f;
+    float lowest = 101.0f;
 
     int highestStudent = -1;
     int lowestStudent = -1;
@@ -589,42 +452,26 @@ void displayStatistics(void)
     float classTotal = 0.0f;
     float classAverage;
 
-
     if(totalStudents == 0)
     {
         printf("\nNo student records available.\n");
         return;
     }
 
-
-    /*
-     * Analyze all students.
-     */
     for(int i = 0; i < totalStudents; i++)
     {
-        /*
-         * Find highest average.
-         */
         if(students[i].average > highest)
         {
-            highest = (int)students[i].average;
+            highest = students[i].average;
             highestStudent = i;
         }
 
-
-        /*
-         * Find lowest average.
-         */
         if(students[i].average < lowest)
         {
-            lowest = (int)students[i].average;
+            lowest = students[i].average;
             lowestStudent = i;
         }
 
-
-        /*
-         * Count pass/fail students.
-         */
         if(students[i].result == 1)
         {
             passCount++;
@@ -634,32 +481,19 @@ void displayStatistics(void)
             failCount++;
         }
 
-
-        /*
-         * Calculate class total.
-         */
         classTotal += students[i].average;
     }
 
-
-    /*
-     * Typecasting again.
-     */
     classAverage =
         classTotal / (float)totalStudents;
-
 
     printf("\n");
     printf("=============== CLASS STATISTICS =============\n");
 
     printf("Total Students : %d\n", totalStudents);
-
     printf("Passed         : %d\n", passCount);
-
     printf("Failed         : %d\n", failCount);
-
     printf("Class Average  : %.2f\n", classAverage);
-
 
     if(highestStudent != -1)
     {
@@ -669,7 +503,6 @@ void displayStatistics(void)
         printf("Top Average    : %.2f\n",
                students[highestStudent].average);
     }
-
 
     if(lowestStudent != -1)
     {
@@ -692,14 +525,8 @@ void clearInputBuffer(void)
 {
     int character;
 
-    /*
-     * while loop.
-     *
-     * Consume remaining characters from input buffer.
-     */
     while((character = getchar()) != '\n' &&
           character != EOF)
     {
-        /* Nothing required here */
     }
 }
